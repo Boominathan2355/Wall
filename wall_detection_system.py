@@ -97,7 +97,7 @@ class WallDetectionSystem:
             scale_factor (float): Pixels per meter
             
         Returns:
-            dict: Area statistics
+            dict: Area statistics in pixels, square meters, and square feet
         """
         try:
             # Convert to binary
@@ -108,7 +108,10 @@ class WallDetectionSystem:
             
             # Calculate areas
             pixel_area = pixel_count
-            real_area = (pixel_area / (scale_factor ** 2)) if scale_factor > 0 else 0
+            real_area_m2 = (pixel_area / (scale_factor ** 2)) if scale_factor > 0 else 0
+            
+            # Convert square meters to square feet (1 m² = 10.764 sq ft)
+            real_area_sqft = real_area_m2 * 10.764
             
             # Calculate coverage percentage
             total_pixels = mask.shape[0] * mask.shape[1]
@@ -116,7 +119,8 @@ class WallDetectionSystem:
             
             return {
                 'pixel_area': int(pixel_area),
-                'real_area': float(real_area),
+                'real_area_m2': float(real_area_m2),
+                'real_area_sqft': float(real_area_sqft),
                 'coverage_percentage': float(coverage_percentage),
                 'total_pixels': int(total_pixels)
             }
@@ -244,7 +248,7 @@ class WallDetectionSystem:
             text_lines = [
                 f"Total Wall Area: {area_results['pixel_area']} pixels",
                 f"Coverage: {area_results['coverage_percentage']:.2f}%",
-                f"Real Area: {area_results['real_area']:.2f} m²",
+                f"Real Area: {area_results['real_area_m2']:.2f} m² ({area_results['real_area_sqft']:.2f} sq ft)",
                 f"Walls Detected: {len(walls)}"
             ]
             

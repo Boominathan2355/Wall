@@ -49,7 +49,7 @@ def main():
                 print(f"  ✓ Analysis complete")
                 print(f"  Total wall area: {results['area_results']['pixel_area']} pixels")
                 print(f"  Coverage: {results['area_results']['coverage_percentage']:.2f}%")
-                print(f"  Real area: {results['area_results']['real_area']:.2f} m²")
+                print(f"  Real area: {results['area_results']['real_area_m2']:.2f} m² ({results['area_results']['real_area_sqft']:.2f} sq ft)")
                 print(f"  Individual walls detected: {len(results['individual_walls'])}")
                 print(f"  Result saved to: {output_path}")
                 

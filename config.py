@@ -38,6 +38,12 @@ INFERENCE_CONFIG = {
     'scale_factor': 100,   # pixels per meter
 }
 
+# Unit Conversion Constants
+UNIT_CONVERSION = {
+    'meters_to_feet': 3.28084,
+    'sqm_to_sqft': 10.764,  # 1 square meter = 10.764 square feet
+}
+
 # Paths
 PATHS = {
     'model_checkpoint': 'models/wall_segmentation_model.pth',
