@@ -119,7 +119,7 @@ def test_model_on_image(image_path="image.png", model_path="models/quick_trained
         print(f"\n  📊 Detection Results:")
         print(f"     • Wall area: {results['area_results']['pixel_area']} pixels")
         print(f"     • Wall coverage: {results['area_results']['coverage_percentage']:.2f}%")
-        print(f"     • Real area: {results['area_results']['real_area']:.2f} m²")
+        print(f"     • Real area: {results['area_results']['real_area_m2']:.2f} m² ({results['area_results']['real_area_sqft']:.2f} sq ft)")
         print(f"     • Walls detected: {len(results['individual_walls'])}")
         
         if results['individual_walls']:
