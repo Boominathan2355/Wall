@@ -5,7 +5,7 @@ A comprehensive deep learning system for detecting and analyzing walls in images
 ## Features
 
 - ✅ **U-Net Architecture** for semantic segmentation (31M parameters)
-- ✅ **Wall Area Calculation** with configurable scale factor
+- ✅ **Wall Area Calculation** with dual unit support (m² and sq ft)
 - ✅ **Individual Wall Detection** using connected components
 - ✅ **Comprehensive Metrics** (IoU, Dice, Accuracy, Precision, Recall)
 - ✅ **Model Training** with validation and checkpointing
@@ -13,6 +13,7 @@ A comprehensive deep learning system for detecting and analyzing walls in images
 - ✅ **Visualization** with bounding boxes and area information
 - ✅ **Real-time Inference** support (CPU and GPU)
 - ✅ **Pre-trained Model** included for quick start
+- ✅ **Multi-Unit Support** - Results in both metric and imperial units
 
 ## Quick Start
 
@@ -60,6 +61,7 @@ wall-detector/
 ├── dataset.py                   # Custom dataset loader with augmentation
 ├── wall_detection_system.py     # Main inference and analysis pipeline
 ├── losses_and_metrics.py        # Loss functions and evaluation metrics
+├── unit_converter.py            # Unit conversion utilities (m² ↔ sq ft)
 ├── train.py                     # Full training script (50 epochs)
 ├── quick_train.py               # Quick training script (2 epochs)
 ├── evaluate.py                  # Model evaluation script
@@ -267,7 +269,9 @@ results = system.analyze_image(
     output_path="result.jpg"
 )
 
-print(f"Wall area detected: {results['area_results']['real_area']:.2f} m²")
+# Results now include both metric and imperial units
+print(f"Wall area detected: {results['area_results']['real_area_m2']:.2f} m²")
+print(f"Wall area detected: {results['area_results']['real_area_sqft']:.2f} sq ft")
 print(f"Wall coverage: {results['area_results']['coverage_percentage']:.2f}%")
 print(f"Walls found: {len(results['individual_walls'])}")
 
@@ -345,6 +349,32 @@ criterion = CombinedLoss(bce_weight=0.5, dice_weight=0.5)
 # Train with custom loss
 loss = criterion(outputs, targets)
 ```
+
+### Unit Conversion & Measurements
+
+The system provides built-in unit conversion utilities for flexible area reporting:
+
+```python
+from unit_converter import UnitConverter, format_area, format_distance
+
+# Direct conversions
+area_sqft = UnitConverter.sqm_to_sqft(19.16)  # Returns 206.20
+distance_ft = UnitConverter.meters_to_feet(5.5)  # Returns 18.04
+
+# Formatted output (both units automatically)
+print(format_area(19.16))          # Output: "19.16 m² (206.20 sq ft)"
+print(format_distance(5.5))        # Output: "5.50 m (18.04 ft)"
+
+# Access conversion constants
+print(UnitConverter.SQM_TO_SQFT)    # 10.764
+print(UnitConverter.METERS_TO_FEET) # 3.28084
+```
+
+Supported conversions:
+- Square meters ↔ Square feet (1 m² = 10.764 sq ft)
+- Meters ↔ Feet (1 m = 3.28084 ft)
+- Meters ↔ Inches (1 m = 39.3701 in)
+- Square meters ↔ Square inches (1 m² = 1550.0031 sq in)
 
 ## Performance Tips
 
@@ -506,7 +536,8 @@ class WallDetectionService:
             scale_factor=100
         )
         return {
-            'wall_area_m2': results['area_results']['real_area'],
+            'wall_area_m2': results['area_results']['real_area_m2'],
+            'wall_area_sqft': results['area_results']['real_area_sqft'],
             'wall_coverage_percent': results['area_results']['coverage_percentage'],
             'walls_detected': len(results['individual_walls'])
         }
@@ -514,7 +545,7 @@ class WallDetectionService:
 # Usage
 service = WallDetectionService()
 result = service.analyze_image_file("room.jpg")
-print(f"Wall area: {result['wall_area_m2']:.2f} m²")
+print(f"Wall area: {result['wall_area_m2']:.2f} m² ({result['wall_area_sqft']:.2f} sq ft)")
 ```
 
 ## Model Architecture Details
