@@ -1,0 +1,29 @@
+# """
+# Wall Detection System - Requirements
+# Updated: November 30, 2025
+# Python: 3.8+
+# """
+
+# Core Deep Learning Framework
+torch>=1.9.0,<2.1.0
+torchvision>=0.10.0,<0.16.0
+
+# Computer Vision
+opencv-python>=4.5.0
+
+# Numerical Computing
+numpy>=1.19.0
+scipy>=1.6.0
+
+# Image Processing & Augmentation
+Pillow>=8.0.0
+albumentations>=1.0.0
+
+# Visualization & Progress
+matplotlib>=3.3.0
+tqdm>=4.50.0
+
+# Optional: For production deployment
+onnx>=1.10.0  # For model export
+onnxruntime>=1.10.0  # For inference
+tensorboard>=2.5.0  # For training visualization
